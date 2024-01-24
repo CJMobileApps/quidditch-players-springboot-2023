@@ -27,11 +27,19 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
-		freeCompilerArgs += "-Xjsr305=strict"
-		jvmTarget = "17"
+		freeCompilerArgs + "-Xjsr305=strict"
+		jvmTarget = JavaVersion.VERSION_17.majorVersion
 	}
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+	jvmTarget = JavaVersion.VERSION_17.majorVersion
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+	jvmTarget = JavaVersion.VERSION_17.majorVersion
 }

@@ -8,4 +8,9 @@ class QuidditchPlayersApplication
 
 fun main(args: Array<String>) {
 	runApplication<QuidditchPlayersApplication>(*args)
+	serverDetails()
+}
+
+private fun serverDetails() {
+	println("Server is up")
 }
