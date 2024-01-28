@@ -8,9 +8,11 @@ import java.util.*
 
 object MockData {
 
-    val gryffindorTeam = listOf(
+    val allQuidditchTeam = gryffindorTeam() + slytherinTeam() + ravenclawTeam() + hufflepuffTeam()
+
+    private fun gryffindorTeam() = listOf(
         Player(
-            id = UUID.fromString("xff9a006f-b047-4e60-98e8-aa035902f54f"),
+            id = UUID.fromString("fd1f2deb-9637-4214-b991-a1b8daf18a7b"),
             firstName = "Harry",
             lastName = "Potter",
             yearsPlayed = listOf(
@@ -136,7 +138,7 @@ object MockData {
         )
     )
 
-    val slytherinTeam = listOf(
+    private fun slytherinTeam() = listOf(
         Player(
             id = UUID.fromString("f5272335-7f6f-4aea-b0ba-c5c5dcec4aa5"),
             firstName = "Draco",
@@ -244,7 +246,7 @@ object MockData {
         )
     )
 
-    val ravenclawTeam = listOf(
+    private fun ravenclawTeam() = listOf(
         Player(
             id = UUID.fromString("aa7fb66e-827f-42db-9aac-974c87b35504"),
             firstName = "Cho",
@@ -342,7 +344,7 @@ object MockData {
         )
     )
 
-    val hufflepuffTeam = listOf(
+    private fun hufflepuffTeam() = listOf(
         Player(
             id = UUID.fromString("aa7fb66e-827f-42db-9aac-974c87b35504"),
             firstName = "Cedric",
