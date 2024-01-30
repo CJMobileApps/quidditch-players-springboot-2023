@@ -467,6 +467,25 @@ object MockData {
             emoji = "\uD83E\uDDA1"
         )
     )
+
+    fun getStatuses(name: String, favoriteSubject: String): List<String> {
+        return listOf(
+            String.format("%s is studying %s %s", name, favoriteSubject, "\uD83D\uDCDA"),
+            String.format("%s is practicing Quidditch %s", name, "\uD83E\uDDF9"),
+            String.format("%s is eating in the Great Hall %s", name, "\uD83C\uDF57"),
+            String.format("%s is serving detention with Mr. Flich %s", name, "\uD83D\uDD57"),
+            String.format("%s is drinking butterbeer at Hogsmeade %s", name, "\uD83C\uDF7B"),
+            String.format("%s is lost in the Forbidden Forest %s", name, "\uD83C\uDF32"),
+            String.format("%s is sleeping in the Gryffindor Dormitory %s", name, "\uD83D\uDE34"),
+            String.format("%s is relaxing in the Gryffindor Common Room %s", name, "\uD83E\uDD81"),
+            String.format("%s is dueling a Slytherin %s", name, "\uD83D\uDC0D"),
+            String.format("%s is destroying a horcrux %s", name, "\uD83D\uDDE1"),
+            String.format("%s is battling a basilisk in the Chamber of Secrets %s", name, "\uD83E\uDD2B"),
+            String.format("%s is escaping Azkaban %s", name, "\uD83D\uDEA3"),
+            String.format("%s is breaking into the Ministry of Magic %s", name, "\uD83D\uDD2E"),
+            String.format("%s is heading to put name into Goblet of Fire %s", name, "\uD83D\uDD25")
+        )
+    }
 }
 
 //todo add etags only to player calls becuse they have status updates
