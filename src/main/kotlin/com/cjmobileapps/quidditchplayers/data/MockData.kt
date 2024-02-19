@@ -276,7 +276,7 @@ object MockData {
             house = HouseName.RAVENCLAW
         ),
         Player(
-            id = UUID.fromString("aa7fb66e-827f-42db-9aac-974c87b35504"),
+            id = UUID.fromString("cdf95045-8df9-4609-bb26-5d4752823022"),
             firstName = "Duncan",
             lastName = "Inglebee",
             yearsPlayed = listOf(
@@ -289,7 +289,7 @@ object MockData {
             house = HouseName.RAVENCLAW
         ),
         Player(
-            id = UUID.fromString("aa7fb66e-827f-42db-9aac-974c87b35504"),
+            id = UUID.fromString("870d5078-584d-4d34-9ff9-303db6c03992"),
             firstName = "Jason",
             lastName = "Samuels",
             yearsPlayed = listOf(
@@ -346,7 +346,7 @@ object MockData {
 
     private fun hufflepuffTeam() = listOf(
         Player(
-            id = UUID.fromString("aa7fb66e-827f-42db-9aac-974c87b35504"),
+            id = UUID.fromString("4f9b53b6-b1c1-42d6-9217-2a0f39f010e3"),
             firstName = "Cedric",
             lastName = "Diggory",
             yearsPlayed = listOf(
@@ -359,7 +359,7 @@ object MockData {
             house = HouseName.HUFFLEPUFF
         ),
         Player(
-            id = UUID.fromString("aa7fb66e-827f-42db-9aac-974c87b35504"),
+            id = UUID.fromString("fa680863-997d-4213-b9c3-d8839099bcfb"),
             firstName = "Herbert",
             lastName = "Fleet",
             yearsPlayed = listOf(
@@ -385,7 +385,7 @@ object MockData {
             house = HouseName.HUFFLEPUFF
         ),
         Player(
-            id = UUID.fromString("aa7fb66e-827f-42db-9aac-974c87b35504"),
+            id = UUID.fromString("adc01148-3d20-4dd6-a421-f87d784e58ac"),
             firstName = "Maxine",
             lastName = "O'Flaherty",
             yearsPlayed = listOf(
