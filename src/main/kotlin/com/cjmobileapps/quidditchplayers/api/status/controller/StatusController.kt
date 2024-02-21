@@ -18,13 +18,35 @@ class StatusController(
     val statusService: StatusService
 ) {
 
+    @GetMapping
+    suspend fun getStatusByHouseName(
+        @RequestParam houseName: String?
+    ): ResponseEntity<ResponseEntityWrapper> {
+        return try {
+            val response = ResponseEntityWrapper(
+                data = statusService.getStatusByHouseName(houseName),
+                statusCode = HttpStatus.OK.value()
+            )
+
+            ResponseEntity
+                .status(HttpStatus.OK)
+                .cacheControl(CacheControl.maxAge(1, TimeUnit.SECONDS))
+                .eTag(response.hashCode().toString())
+                .body(response)
+        } catch (clientException: ClientException) {
+            clientException.toResponseEntity()
+        } catch (internalException: InternalException) {
+            internalException.toResponseEntity()
+        }
+    }
+
     @GetMapping(path = ["{id}"])
-    suspend fun getStatus(
+    suspend fun getStatusByPlayerId(
         @PathVariable("id") id: UUID
     ): ResponseEntity<ResponseEntityWrapper> {
         return try {
             val response = ResponseEntityWrapper(
-                data = statusService.getStatus(id),
+                data = statusService.getStatusByPlayerId(id),
                 statusCode = HttpStatus.OK.value()
             )
 

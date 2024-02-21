@@ -7,5 +7,8 @@ import java.util.*
 interface StatusDao {
 
     @Throws(ClientException::class, InternalException::class)
-    suspend fun getStatus(playerId: UUID): String
+    suspend fun getStatusByHouseName(houseName: String?): String
+
+    @Throws(ClientException::class, InternalException::class)
+    suspend fun getStatusByPlayerId(playerId: UUID): String
 }

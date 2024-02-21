@@ -11,10 +11,43 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository("statusRepository")
-class StatusRepository() : StatusDao {
+class StatusRepository : StatusDao {
 
     @Throws(ClientException::class, InternalException::class)
-    override suspend fun getStatus(playerId: UUID): String {
+    override suspend fun getStatusByHouseName(houseName: String?): String {
+        return coroutineScope {
+            withContext(Dispatchers.Default) {
+                try {
+
+                    val players = if (!houseName.isNullOrEmpty()) {
+                        MockData.allQuidditchTeam.filter {
+                            it.house.name == houseName
+                        }
+                    } else {
+                        MockData.allQuidditchTeam
+                    }
+
+                    val player = players.random()
+                    MockData.getStatuses(
+                        name = "${player.firstName} ${player.lastName}",
+                        favoriteSubject = player.favoriteSubject
+                    ).random()
+                } catch (e: ClientException) {
+                    Logger.errorStackTrace("getStatusByHouseName()", e)
+                    throw ClientException(e.message)
+                } catch (e: InternalException) {
+                    Logger.errorStackTrace("getStatusByHouseName()", e)
+                    throw InternalException()
+                } catch (e: Exception) {
+                    Logger.errorStackTrace("getStatusByHouseName()", e)
+                    throw InternalException()
+                }
+            }
+        }
+    }
+
+    @Throws(ClientException::class, InternalException::class)
+    override suspend fun getStatusByPlayerId(playerId: UUID): String {
         return coroutineScope {
             withContext(Dispatchers.Default) {
                 try {
@@ -29,13 +62,13 @@ class StatusRepository() : StatusDao {
                         favoriteSubject = player.favoriteSubject
                     ).random()
                 } catch (e: ClientException) {
-                    Logger.errorStackTrace("getStatus()", e)
+                    Logger.errorStackTrace("getStatusByPlayerId()", e)
                     throw ClientException(e.message)
                 } catch (e: InternalException) {
-                    Logger.errorStackTrace("getStatus()", e)
+                    Logger.errorStackTrace("getStatusByPlayerId()", e)
                     throw InternalException()
                 } catch (e: Exception) {
-                    Logger.errorStackTrace("getStatus()", e)
+                    Logger.errorStackTrace("getStatusByPlayerId()", e)
                     throw InternalException()
                 }
             }

@@ -11,5 +11,8 @@ import java.util.UUID
 class StatusServiceImpl(@Qualifier("statusRepository") val statusDao: StatusDao) : StatusService {
 
     @Throws(ClientException::class, InternalException::class)
-    override suspend fun getStatus(playerId: UUID) = statusDao.getStatus(playerId)
+    override suspend fun getStatusByHouseName(houseName: String?) = statusDao.getStatusByHouseName(houseName)
+
+    @Throws(ClientException::class, InternalException::class)
+    override suspend fun getStatusByPlayerId(playerId: UUID) = statusDao.getStatusByPlayerId(playerId)
 }
