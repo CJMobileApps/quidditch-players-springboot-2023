@@ -1,5 +1,6 @@
 package com.cjmobileapps.quidditchplayers.api.status.service
 
+import com.cjmobileapps.quidditchplayers.data.model.Status
 import com.cjmobileapps.quidditchplayers.util.ClientException
 import com.cjmobileapps.quidditchplayers.util.InternalException
 import java.util.*
@@ -7,8 +8,8 @@ import java.util.*
 interface StatusService {
 
     @Throws(ClientException::class, InternalException::class)
-    suspend fun getStatusByHouseName(houseName: String?): String
+    suspend fun getStatusByHouseName(houseName: String?): Status
 
     @Throws(ClientException::class, InternalException::class)
-    suspend fun getStatusByPlayerId(playerId: UUID): String
+    suspend fun getStatusByPlayerId(playerId: UUID): Status
 }

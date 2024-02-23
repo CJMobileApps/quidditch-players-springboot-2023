@@ -1,6 +1,7 @@
 package com.cjmobileapps.quidditchplayers.api.status.repository
 
 import com.cjmobileapps.quidditchplayers.data.MockData
+import com.cjmobileapps.quidditchplayers.data.model.Status
 import com.cjmobileapps.quidditchplayers.util.ClientException
 import com.cjmobileapps.quidditchplayers.util.InternalException
 import com.cjmobileapps.quidditchplayers.util.Logger
@@ -14,7 +15,7 @@ import java.util.*
 class StatusRepository : StatusDao {
 
     @Throws(ClientException::class, InternalException::class)
-    override suspend fun getStatusByHouseName(houseName: String?): String {
+    override suspend fun getStatusByHouseName(houseName: String?): Status {
         return coroutineScope {
             withContext(Dispatchers.Default) {
                 try {
@@ -28,10 +29,15 @@ class StatusRepository : StatusDao {
                     }
 
                     val player = players.random()
-                    MockData.getStatuses(
+                    val status = MockData.getStatuses(
                         name = "${player.firstName} ${player.lastName}",
                         favoriteSubject = player.favoriteSubject
                     ).random()
+
+                    Status(
+                        playerId = player.id,
+                        status = status
+                    )
                 } catch (e: ClientException) {
                     Logger.errorStackTrace("getStatusByHouseName()", e)
                     throw ClientException(e.message)
@@ -47,7 +53,7 @@ class StatusRepository : StatusDao {
     }
 
     @Throws(ClientException::class, InternalException::class)
-    override suspend fun getStatusByPlayerId(playerId: UUID): String {
+    override suspend fun getStatusByPlayerId(playerId: UUID): Status {
         return coroutineScope {
             withContext(Dispatchers.Default) {
                 try {
@@ -57,10 +63,15 @@ class StatusRepository : StatusDao {
                             player.id == playerId
                         }
 
-                    MockData.getStatuses(
+                    val status = MockData.getStatuses(
                         name = "${player.firstName} ${player.lastName}",
                         favoriteSubject = player.favoriteSubject
                     ).random()
+
+                    Status(
+                        playerId = player.id,
+                        status = status
+                    )
                 } catch (e: ClientException) {
                     Logger.errorStackTrace("getStatusByPlayerId()", e)
                     throw ClientException(e.message)
