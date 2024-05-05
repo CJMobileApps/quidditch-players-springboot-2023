@@ -2,6 +2,7 @@ package com.cjmobileapps.quidditchplayers.api.status.controller
 
 import com.cjmobileapps.quidditchplayers.api.status.service.StatusService
 import com.cjmobileapps.quidditchplayers.data.model.ResponseEntityWrapper
+import com.cjmobileapps.quidditchplayers.data.model.Status
 import com.cjmobileapps.quidditchplayers.data.model.toResponseEntity
 import com.cjmobileapps.quidditchplayers.util.ClientException
 import com.cjmobileapps.quidditchplayers.util.InternalException
@@ -21,7 +22,7 @@ class StatusController(
     @GetMapping
     suspend fun getStatusByHouseName(
         @RequestParam houseName: String?
-    ): ResponseEntity<ResponseEntityWrapper> {
+    ): ResponseEntity<ResponseEntityWrapper<Status>> {
         return try {
             val response = ResponseEntityWrapper(
                 data = statusService.getStatusByHouseName(houseName),
@@ -43,7 +44,7 @@ class StatusController(
     @GetMapping(path = ["{id}"])
     suspend fun getStatusByPlayerId(
         @PathVariable("id") id: UUID
-    ): ResponseEntity<ResponseEntityWrapper> {
+    ): ResponseEntity<ResponseEntityWrapper<Status>> {
         return try {
             val response = ResponseEntityWrapper(
                 data = statusService.getStatusByPlayerId(id),

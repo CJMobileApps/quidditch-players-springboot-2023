@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class ResponseEntityWrapper(
-    val data: Any? = null,
+data class ResponseEntityWrapper<T>(
+    val data: T? = null,
     val error: Error? = null,
     val statusCode: Int
 )
@@ -18,8 +18,8 @@ data class Error(
     val message: String? = null
 )
 
-fun ClientException.toResponseEntity(): ResponseEntity<ResponseEntityWrapper> {
-    val response = ResponseEntityWrapper(
+fun <T> ClientException.toResponseEntity(): ResponseEntity<ResponseEntityWrapper<T>> {
+    val response = ResponseEntityWrapper<T>(
         error = Error(isError = true, message = this.message),
         statusCode = HttpStatus.BAD_REQUEST.value()
     )
@@ -29,8 +29,8 @@ fun ClientException.toResponseEntity(): ResponseEntity<ResponseEntityWrapper> {
         .body(response)
 }
 
-fun InternalException.toResponseEntity(): ResponseEntity<ResponseEntityWrapper> {
-    val response = ResponseEntityWrapper(
+fun <T> InternalException.toResponseEntity(): ResponseEntity<ResponseEntityWrapper<T>> {
+    val response = ResponseEntityWrapper<T>(
         error = Error(isError = true, message = this.message),
         statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value()
     )

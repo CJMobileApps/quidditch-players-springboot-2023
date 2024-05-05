@@ -1,6 +1,7 @@
 package com.cjmobileapps.quidditchplayers.api.house.controller
 
 import com.cjmobileapps.quidditchplayers.api.house.service.HouseService
+import com.cjmobileapps.quidditchplayers.data.model.House
 import com.cjmobileapps.quidditchplayers.data.model.ResponseEntityWrapper
 import com.cjmobileapps.quidditchplayers.data.model.toResponseEntity
 import com.cjmobileapps.quidditchplayers.util.ClientException
@@ -20,7 +21,7 @@ class HouseController(
 ) {
 
     @GetMapping
-    suspend fun getAllHouses(): ResponseEntity<ResponseEntityWrapper> {
+    suspend fun getAllHouses(): ResponseEntity<ResponseEntityWrapper<List<House>>> {
         return try {
             val response = ResponseEntityWrapper(
                 data = houseService.getAllHouses(),

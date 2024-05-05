@@ -246,7 +246,7 @@ object MockData {
         )
     )
 
-    private fun ravenclawTeam() = listOf(
+    fun ravenclawTeam() = listOf(
         Player(
             id = UUID.fromString("aa7fb66e-827f-42db-9aac-974c87b35504"),
             firstName = "Cho",
