@@ -1,6 +1,7 @@
 package com.cjmobileapps.quidditchplayers.api.position.controller
 
 import com.cjmobileapps.quidditchplayers.api.position.service.PositionService
+import com.cjmobileapps.quidditchplayers.data.model.Position
 import com.cjmobileapps.quidditchplayers.data.model.ResponseEntityWrapper
 import com.cjmobileapps.quidditchplayers.data.model.toResponseEntity
 import com.cjmobileapps.quidditchplayers.util.ClientException
@@ -20,7 +21,7 @@ class PositionController(
 ) {
 
     @GetMapping
-    suspend fun getPositions(): ResponseEntity<ResponseEntityWrapper> {
+    suspend fun getPositions(): ResponseEntity<ResponseEntityWrapper<Map<Int, Position>>> {
         return try {
             val response = ResponseEntityWrapper(
                 data = positionService.getPositions(),
