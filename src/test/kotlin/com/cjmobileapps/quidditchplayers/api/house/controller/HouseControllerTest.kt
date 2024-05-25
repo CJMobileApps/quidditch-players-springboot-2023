@@ -34,8 +34,6 @@ class HouseControllerTest : BaseIntegrationTest() {
     @MockBean
     private lateinit var mockHouseService: HouseService
 
-
-
     @Test
     fun `getAllHouses success call`(): Unit = runBlocking {
 

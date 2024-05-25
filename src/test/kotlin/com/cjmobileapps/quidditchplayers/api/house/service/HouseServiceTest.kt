@@ -30,7 +30,7 @@ class HouseServiceTest {
         Mockito.`when`(mockHouseDao.getAllHouses()).thenReturn(MockData.houses)
 
         // then
-        val houses = MockData.houses
+        val houses = houseService.getAllHouses()
 
         // verify
         Assertions.assertEquals(
