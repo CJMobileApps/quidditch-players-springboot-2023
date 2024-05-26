@@ -487,6 +487,3 @@ object MockData {
         )
     }
 }
-
-//todo add etags only to player calls becuse they have status updates
-//todo other api call cache control max age 60 seconds
