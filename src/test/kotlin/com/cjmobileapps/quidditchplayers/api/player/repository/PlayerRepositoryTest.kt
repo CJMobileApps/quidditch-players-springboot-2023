@@ -1,6 +1,5 @@
 package com.cjmobileapps.quidditchplayers.api.player.repository
 
-import com.cjmobileapps.quidditchplayers.api.house.repository.HouseRepository
 import com.cjmobileapps.quidditchplayers.data.MockData
 import com.cjmobileapps.quidditchplayers.data.model.HouseName
 import kotlinx.coroutines.runBlocking

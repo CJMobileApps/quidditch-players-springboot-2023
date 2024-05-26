@@ -100,7 +100,7 @@ class PositionControllerTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `getAllHouses throw internalException`(): Unit = runBlocking {
+    fun `getPositions throw internalException`(): Unit = runBlocking {
         // given
         val response = ResponseEntityWrapper<Map<Int, Position>>(
             data = null,
