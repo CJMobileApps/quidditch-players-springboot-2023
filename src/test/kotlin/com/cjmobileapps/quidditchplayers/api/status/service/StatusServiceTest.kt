@@ -1,8 +1,5 @@
 package com.cjmobileapps.quidditchplayers.api.status.service
 
-import com.cjmobileapps.quidditchplayers.api.player.repository.PlayerDao
-import com.cjmobileapps.quidditchplayers.api.player.service.PlayerService
-import com.cjmobileapps.quidditchplayers.api.player.service.PlayerServiceImpl
 import com.cjmobileapps.quidditchplayers.api.status.repository.StatusDao
 import com.cjmobileapps.quidditchplayers.data.MockData
 import com.cjmobileapps.quidditchplayers.data.model.HouseName
@@ -14,10 +11,9 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import java.util.*
+import java.util.UUID
 
 class StatusServiceTest {
-
     @Mock
     lateinit var mockStatusDao: StatusDao
 
@@ -30,46 +26,48 @@ class StatusServiceTest {
     }
 
     @Test
-    fun `getStatusByPlayerId success`(): Unit = runBlocking {
+    fun `getStatusByPlayerId success`(): Unit =
+        runBlocking {
+            // given
+            val mockStatus =
+                Status(
+                    playerId = UUID.fromString("fd1f2deb-9637-4214-b991-a1b8daf18a7b"),
+                    status = MockData.getStatuses(name = "Harry Potter", "Defense Against The Dark Arts").first(),
+                )
 
-        // given
-        val mockStatus = Status(
-            playerId = UUID.fromString("fd1f2deb-9637-4214-b991-a1b8daf18a7b"),
-            status = MockData.getStatuses(name = "Harry Potter", "Defense Against The Dark Arts").first()
-        )
+            // when
+            Mockito.`when`(mockStatusDao.getStatusByPlayerId(UUID.fromString("fd1f2deb-9637-4214-b991-a1b8daf18a7b")))
+                .thenReturn(mockStatus)
 
-        // when
-        Mockito.`when`(mockStatusDao.getStatusByPlayerId(UUID.fromString("fd1f2deb-9637-4214-b991-a1b8daf18a7b")))
-            .thenReturn(mockStatus)
+            // then
+            val status = statusService.getStatusByPlayerId(UUID.fromString("fd1f2deb-9637-4214-b991-a1b8daf18a7b"))
 
-        // then
-        val status = statusService.getStatusByPlayerId(UUID.fromString("fd1f2deb-9637-4214-b991-a1b8daf18a7b"))
-
-        Assertions.assertEquals(
-            mockStatus,
-            status
-        )
-    }
+            Assertions.assertEquals(
+                mockStatus,
+                status,
+            )
+        }
 
     @Test
-    fun `getStatusByHouseName success`(): Unit = runBlocking {
+    fun `getStatusByHouseName success`(): Unit =
+        runBlocking {
+            // given
+            val mockStatus =
+                Status(
+                    playerId = UUID.fromString("fd1f2deb-9637-4214-b991-a1b8daf18a7b"),
+                    status = MockData.getStatuses(name = "Harry Potter", "Defense Against The Dark Arts").first(),
+                )
 
-        // given
-        val mockStatus = Status(
-            playerId = UUID.fromString("fd1f2deb-9637-4214-b991-a1b8daf18a7b"),
-            status = MockData.getStatuses(name = "Harry Potter", "Defense Against The Dark Arts").first()
-        )
+            // when
+            Mockito.`when`(mockStatusDao.getStatusByHouseName(HouseName.GRYFFINDOR.name))
+                .thenReturn(mockStatus)
 
-        // when
-        Mockito.`when`(mockStatusDao.getStatusByHouseName(HouseName.GRYFFINDOR.name))
-            .thenReturn(mockStatus)
+            // then
+            val status = statusService.getStatusByHouseName(HouseName.GRYFFINDOR.name)
 
-        // then
-        val status = statusService.getStatusByHouseName(HouseName.GRYFFINDOR.name)
-
-        Assertions.assertEquals(
-            mockStatus,
-            status
-        )
-    }
+            Assertions.assertEquals(
+                mockStatus,
+                status,
+            )
+        }
 }

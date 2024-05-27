@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class PlayerRepositoryTest {
-
     private lateinit var playerRepository: PlayerRepository
 
     @BeforeEach
@@ -17,24 +16,24 @@ class PlayerRepositoryTest {
     }
 
     @Test
-    fun `getAllPlayers from ravenclaw house`(): Unit = runBlocking {
+    fun `getAllPlayers from ravenclaw house`(): Unit =
+        runBlocking {
+            val players = playerRepository.getPlayers(HouseName.RAVENCLAW.name)
 
-        val players = playerRepository.getPlayers(HouseName.RAVENCLAW.name)
-
-        Assertions.assertEquals(
-            MockData.ravenclawTeam(),
-            players
-        )
-    }
+            Assertions.assertEquals(
+                MockData.ravenclawTeam(),
+                players,
+            )
+        }
 
     @Test
-    fun `getAllPlayers with no house`(): Unit = runBlocking {
+    fun `getAllPlayers with no house`(): Unit =
+        runBlocking {
+            val players = playerRepository.getPlayers(null)
 
-        val players = playerRepository.getPlayers(null)
-
-        Assertions.assertEquals(
-            MockData.allQuidditchTeam,
-            players
-        )
-    }
+            Assertions.assertEquals(
+                MockData.allQuidditchTeam,
+                players,
+            )
+        }
 }

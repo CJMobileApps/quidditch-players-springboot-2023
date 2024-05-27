@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository
 
 @Repository("playerRepository")
 class PlayerRepository() : PlayerDao {
-
     @Throws(ClientException::class, InternalException::class)
     override suspend fun getPlayers(houseName: String?): List<Player> {
         return coroutineScope {

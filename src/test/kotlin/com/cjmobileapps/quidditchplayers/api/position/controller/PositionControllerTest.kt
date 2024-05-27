@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @AutoConfigureMockMvc
 class PositionControllerTest : BaseIntegrationTest() {
-
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -35,100 +34,106 @@ class PositionControllerTest : BaseIntegrationTest() {
     private lateinit var mockPositionService: PositionService
 
     @Test
-    fun `getPositions success call`(): Unit = runBlocking {
+    fun `getPositions success call`(): Unit =
+        runBlocking {
+            // given
+            val response =
+                ResponseEntityWrapper(
+                    data = MockData.positions,
+                    error = null,
+                    statusCode = HttpStatus.OK.value(),
+                )
 
-        // given
-        val response = ResponseEntityWrapper(
-            data = MockData.positions,
-            error = null,
-            statusCode = HttpStatus.OK.value()
-        )
+            val responseJsonPositionResponseEntityWrapper = jsonPositionResponseEntityWrapper.write(response).json
 
-        val responseJsonPositionResponseEntityWrapper = jsonPositionResponseEntityWrapper.write(response).json
+            // when
+            Mockito.`when`(mockPositionService.getPositions()).thenReturn(MockData.positions)
 
-        // when
-        Mockito.`when`(mockPositionService.getPositions()).thenReturn(MockData.positions)
+            // verify
+            val mvcResult =
+                mockMvc.perform(
+                    MockMvcRequestBuilders
+                        .get("/api/v1/quidditchplayers/position")
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                    .andReturn()
 
-
-        // verify
-        val mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders
-                .get("/api/v1/quidditchplayers/position")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
-
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().json(responseJsonPositionResponseEntityWrapper))
-    }
-
-    @Test
-    fun `getPositions throw clientException`(): Unit = runBlocking {
-
-        // given
-        val response = ResponseEntityWrapper<Map<Int, Position>>(
-            data = null,
-            error = Error(
-                isError = true,
-                message = "Could not find positions"
-            ),
-            statusCode = HttpStatus.BAD_REQUEST.value()
-        )
-
-        val responseJsonPositionResponseEntityWrapper = jsonPositionResponseEntityWrapper.write(response).json
-
-        // when
-        Mockito.`when`(mockPositionService.getPositions()).thenThrow(ClientException("Could not find positions"))
-
-
-        // verify
-        val mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders
-                .get("/api/v1/quidditchplayers/position")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
-
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().is4xxClientError)
-            .andExpect(MockMvcResultMatchers.content().json(responseJsonPositionResponseEntityWrapper))
-    }
+            mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(MockMvcResultMatchers.content().json(responseJsonPositionResponseEntityWrapper))
+        }
 
     @Test
-    fun `getPositions throw internalException`(): Unit = runBlocking {
-        // given
-        val response = ResponseEntityWrapper<Map<Int, Position>>(
-            data = null,
-            error = Error(
-                isError = true,
-                message = "Could not find positions"
-            ),
-            statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value()
-        )
+    fun `getPositions throw clientException`(): Unit =
+        runBlocking {
+            // given
+            val response =
+                ResponseEntityWrapper<Map<Int, Position>>(
+                    data = null,
+                    error =
+                        Error(
+                            isError = true,
+                            message = "Could not find positions",
+                        ),
+                    statusCode = HttpStatus.BAD_REQUEST.value(),
+                )
 
-        val responseJsonPositionResponseEntityWrapper = jsonPositionResponseEntityWrapper.write(response).json
+            val responseJsonPositionResponseEntityWrapper = jsonPositionResponseEntityWrapper.write(response).json
 
-        // when
-        Mockito.`when`(mockPositionService.getPositions()).thenThrow(InternalException("Could not find positions"))
+            // when
+            Mockito.`when`(mockPositionService.getPositions()).thenThrow(ClientException("Could not find positions"))
 
+            // verify
+            val mvcResult =
+                mockMvc.perform(
+                    MockMvcRequestBuilders
+                        .get("/api/v1/quidditchplayers/position")
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                    .andReturn()
 
-        // verify
-        val mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders
-                .get("/api/v1/quidditchplayers/position")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
+            mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError)
+                .andExpect(MockMvcResultMatchers.content().json(responseJsonPositionResponseEntityWrapper))
+        }
 
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().is5xxServerError)
-            .andExpect(MockMvcResultMatchers.content().json(responseJsonPositionResponseEntityWrapper))
-    }
+    @Test
+    fun `getPositions throw internalException`(): Unit =
+        runBlocking {
+            // given
+            val response =
+                ResponseEntityWrapper<Map<Int, Position>>(
+                    data = null,
+                    error =
+                        Error(
+                            isError = true,
+                            message = "Could not find positions",
+                        ),
+                    statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                )
+
+            val responseJsonPositionResponseEntityWrapper = jsonPositionResponseEntityWrapper.write(response).json
+
+            // when
+            Mockito.`when`(mockPositionService.getPositions()).thenThrow(InternalException("Could not find positions"))
+
+            // verify
+            val mvcResult =
+                mockMvc.perform(
+                    MockMvcRequestBuilders
+                        .get("/api/v1/quidditchplayers/position")
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                    .andReturn()
+
+            mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError)
+                .andExpect(MockMvcResultMatchers.content().json(responseJsonPositionResponseEntityWrapper))
+        }
 }

@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 @Service
-class PositionServiceImpl(@Qualifier("positionRepository") val positionDao: PositionDao): PositionService {
-
+class PositionServiceImpl(
+    @Qualifier("positionRepository") val positionDao: PositionDao,
+) : PositionService {
     @Throws(ClientException::class, InternalException::class)
     override suspend fun getPositions() = positionDao.getPositions()
 }

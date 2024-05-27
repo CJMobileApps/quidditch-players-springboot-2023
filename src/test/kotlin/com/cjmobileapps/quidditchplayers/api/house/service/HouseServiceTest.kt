@@ -11,7 +11,6 @@ import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 class HouseServiceTest {
-
     @Mock
     lateinit var mockHouseDao: HouseDao
 
@@ -24,18 +23,18 @@ class HouseServiceTest {
     }
 
     @Test
-    fun `getAllHouses success call`(): Unit = runBlocking {
+    fun `getAllHouses success call`(): Unit =
+        runBlocking {
+            // when
+            Mockito.`when`(mockHouseDao.getAllHouses()).thenReturn(MockData.houses)
 
-        // when
-        Mockito.`when`(mockHouseDao.getAllHouses()).thenReturn(MockData.houses)
+            // then
+            val houses = houseService.getAllHouses()
 
-        // then
-        val houses = houseService.getAllHouses()
-
-        // verify
-        Assertions.assertEquals(
-            MockData.houses,
-            houses
-        )
-    }
+            // verify
+            Assertions.assertEquals(
+                MockData.houses,
+                houses,
+            )
+        }
 }

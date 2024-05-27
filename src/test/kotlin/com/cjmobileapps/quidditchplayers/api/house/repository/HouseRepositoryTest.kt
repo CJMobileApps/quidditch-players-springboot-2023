@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class HouseRepositoryTest {
-
     private lateinit var houseRepository: HouseRepository
 
     @BeforeEach
@@ -16,15 +15,15 @@ class HouseRepositoryTest {
     }
 
     @Test
-    fun `getAllHouses success call`(): Unit = runBlocking {
+    fun `getAllHouses success call`(): Unit =
+        runBlocking {
+            // then
+            val houses = houseRepository.getAllHouses()
 
-        // then
-        val houses = houseRepository.getAllHouses()
-
-        // verify
-        Assertions.assertEquals(
-            MockData.houses,
-            houses
-        )
-    }
+            // verify
+            Assertions.assertEquals(
+                MockData.houses,
+                houses,
+            )
+        }
 }

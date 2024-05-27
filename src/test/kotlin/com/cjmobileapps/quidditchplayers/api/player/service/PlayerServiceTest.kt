@@ -12,7 +12,6 @@ import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 class PlayerServiceTest {
-
     @Mock
     lateinit var mockPlayerDao: PlayerDao
 
@@ -25,34 +24,34 @@ class PlayerServiceTest {
     }
 
     @Test
-    fun `getAllPlayers from ravenclaw house`(): Unit = runBlocking {
+    fun `getAllPlayers from ravenclaw house`(): Unit =
+        runBlocking {
+            // when
+            Mockito.`when`(mockPlayerDao.getPlayers(HouseName.RAVENCLAW.name)).thenReturn(MockData.ravenclawTeam())
 
-        // when
-        Mockito.`when`(mockPlayerDao.getPlayers(HouseName.RAVENCLAW.name)).thenReturn(MockData.ravenclawTeam())
+            // then
+            val players = playerService.getPlayers(HouseName.RAVENCLAW.name)
 
-        // then
-        val players = playerService.getPlayers(HouseName.RAVENCLAW.name)
-
-        // verify
-        Assertions.assertEquals(
-            MockData.ravenclawTeam(),
-            players
-        )
-    }
+            // verify
+            Assertions.assertEquals(
+                MockData.ravenclawTeam(),
+                players,
+            )
+        }
 
     @Test
-    fun `getAllPlayers with no house provided`(): Unit = runBlocking {
+    fun `getAllPlayers with no house provided`(): Unit =
+        runBlocking {
+            // when
+            Mockito.`when`(mockPlayerDao.getPlayers(null)).thenReturn(MockData.allQuidditchTeam)
 
-        // when
-        Mockito.`when`(mockPlayerDao.getPlayers(null)).thenReturn(MockData.allQuidditchTeam)
+            // then
+            val players = playerService.getPlayers(null)
 
-        // then
-        val players = playerService.getPlayers(null)
-
-        // verify
-        Assertions.assertEquals(
-            MockData.allQuidditchTeam,
-            players
-        )
-    }
+            // verify
+            Assertions.assertEquals(
+                MockData.allQuidditchTeam,
+                players,
+            )
+        }
 }

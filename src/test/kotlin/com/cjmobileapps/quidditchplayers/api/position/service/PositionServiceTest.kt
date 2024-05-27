@@ -11,7 +11,6 @@ import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 class PositionServiceTest {
-
     @Mock
     lateinit var mockPositionDao: PositionDao
 
@@ -24,18 +23,18 @@ class PositionServiceTest {
     }
 
     @Test
-    fun `getAllHouses success call`(): Unit = runBlocking {
+    fun `getAllHouses success call`(): Unit =
+        runBlocking {
+            // when
+            Mockito.`when`(mockPositionDao.getPositions()).thenReturn(MockData.positions)
 
-        // when
-        Mockito.`when`(mockPositionDao.getPositions()).thenReturn(MockData.positions)
+            // then
+            val positions = positionService.getPositions()
 
-        // then
-        val positions = positionService.getPositions()
-
-        // verify
-        Assertions.assertEquals(
-            MockData.positions,
-            positions
-        )
-    }
+            // verify
+            Assertions.assertEquals(
+                MockData.positions,
+                positions,
+            )
+        }
 }

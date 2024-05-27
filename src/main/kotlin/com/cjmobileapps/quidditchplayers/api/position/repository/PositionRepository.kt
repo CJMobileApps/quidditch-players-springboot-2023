@@ -12,13 +12,12 @@ import org.springframework.stereotype.Repository
 
 @Repository("positionRepository")
 class PositionRepository() : PositionDao {
-
     @Throws(ClientException::class, InternalException::class)
     override suspend fun getPositions(): Map<Int, Position> {
         return coroutineScope {
             withContext(Dispatchers.Default) {
                 try {
-                  MockData.positions
+                    MockData.positions
                 } catch (e: ClientException) {
                     Logger.errorStackTrace("getAllPlayers()", e)
                     throw ClientException(e.message)

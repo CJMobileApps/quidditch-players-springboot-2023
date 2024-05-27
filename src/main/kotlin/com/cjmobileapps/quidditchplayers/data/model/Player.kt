@@ -10,5 +10,5 @@ data class Player(
     val favoriteSubject: String,
     val position: Int,
     val imageUrl: String,
-    val house: HouseName
+    val house: HouseName,
 )
