@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class PositionRepositoryTest {
-
     private lateinit var positionRepository: PositionRepository
 
     @BeforeEach
@@ -16,15 +15,15 @@ class PositionRepositoryTest {
     }
 
     @Test
-    fun `getPositions success call`(): Unit = runBlocking {
+    fun `getPositions success call`(): Unit =
+        runBlocking {
+            // then
+            val positions = positionRepository.getPositions()
 
-        // then
-        val positions = positionRepository.getPositions()
-
-        // verify
-        Assertions.assertEquals(
-            MockData.positions,
-            positions
-        )
-    }
+            // verify
+            Assertions.assertEquals(
+                MockData.positions,
+                positions,
+            )
+        }
 }

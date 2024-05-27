@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository
 
 @Repository("houseRepository")
 class HouseRepository() : HouseDao {
-
     @Throws(ClientException::class, InternalException::class)
     override suspend fun getAllHouses(): List<House> {
         return coroutineScope {

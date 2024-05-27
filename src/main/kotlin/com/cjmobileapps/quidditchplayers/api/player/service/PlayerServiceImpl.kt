@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 @Service
-class PlayerServiceImpl(@Qualifier("playerRepository") val playerDao: PlayerDao): PlayerService {
-
+class PlayerServiceImpl(
+    @Qualifier("playerRepository") val playerDao: PlayerDao,
+) : PlayerService {
     @Throws(ClientException::class, InternalException::class)
     override suspend fun getPlayers(houseName: String?): List<Player> {
         return playerDao.getPlayers(houseName)

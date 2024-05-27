@@ -25,7 +25,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @AutoConfigureMockMvc
 class PlayerControllerTest : BaseIntegrationTest() {
-
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -36,201 +35,214 @@ class PlayerControllerTest : BaseIntegrationTest() {
     private lateinit var mockPlayerService: PlayerService
 
     @Test
-    fun `getPlayers from Ravenclaw house then success call`(): Unit = runBlocking {
+    fun `getPlayers from Ravenclaw house then success call`(): Unit =
+        runBlocking {
+            // given
+            val response =
+                ResponseEntityWrapper(
+                    data = MockData.ravenclawTeam(),
+                    error = null,
+                    statusCode = HttpStatus.OK.value(),
+                )
 
-        // given
-        val response = ResponseEntityWrapper(
-            data = MockData.ravenclawTeam(),
-            error = null,
-            statusCode = HttpStatus.OK.value()
-        )
+            val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
 
-        val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
+            // When
+            Mockito.`when`(mockPlayerService.getPlayers(HouseName.RAVENCLAW.name)).thenReturn(MockData.ravenclawTeam())
 
-        // When
-        Mockito.`when`(mockPlayerService.getPlayers(HouseName.RAVENCLAW.name)).thenReturn(MockData.ravenclawTeam())
+            // verify
+            val mvcResult =
+                mockMvc.perform(
+                    MockMvcRequestBuilders
+                        .get("/api/v1/quidditchplayers/player")
+                        .param("houseName", HouseName.RAVENCLAW.name)
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                    .andReturn()
 
-        // verify
-        val mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders
-                .get("/api/v1/quidditchplayers/player")
-                .param("houseName", HouseName.RAVENCLAW.name)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
-
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
-    }
-
-    @Test
-    fun `getPlayers from Ravenclaw house then throw clientException`(): Unit = runBlocking {
-
-        // given
-        val response = ResponseEntityWrapper<List<Player>>(
-            data = null,
-            error = Error(
-                isError = true,
-                message = "Could not find players"
-            ),
-            statusCode = HttpStatus.BAD_REQUEST.value()
-        )
-
-        val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
-
-
-        // when
-        Mockito.`when`(mockPlayerService.getPlayers(HouseName.RAVENCLAW.name)).thenThrow(ClientException("Could not find players"))
-
-        // Verify
-        val mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders
-                .get("/api/v1/quidditchplayers/player")
-                .param("houseName", HouseName.RAVENCLAW.name)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
-
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().is4xxClientError)
-            .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
-    }
+            mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
+        }
 
     @Test
-    fun `getPlayers from Ravenclaw house then throw internalException`(): Unit = runBlocking {
+    fun `getPlayers from Ravenclaw house then throw clientException`(): Unit =
+        runBlocking {
+            // given
+            val response =
+                ResponseEntityWrapper<List<Player>>(
+                    data = null,
+                    error =
+                        Error(
+                            isError = true,
+                            message = "Could not find players",
+                        ),
+                    statusCode = HttpStatus.BAD_REQUEST.value(),
+                )
 
-        // given
-        val response = ResponseEntityWrapper<List<Player>>(
-            data = null,
-            error = Error(
-                isError = true,
-                message = "Could not find players"
-            ),
-            statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value()
-        )
+            val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
 
-        val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
+            // when
+            Mockito.`when`(mockPlayerService.getPlayers(HouseName.RAVENCLAW.name)).thenThrow(ClientException("Could not find players"))
 
+            // Verify
+            val mvcResult =
+                mockMvc.perform(
+                    MockMvcRequestBuilders
+                        .get("/api/v1/quidditchplayers/player")
+                        .param("houseName", HouseName.RAVENCLAW.name)
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                    .andReturn()
 
-        // when
-        Mockito.`when`(mockPlayerService.getPlayers(HouseName.RAVENCLAW.name)).thenThrow(InternalException("Could not find players"))
-
-        // Verify
-        val mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders
-                .get("/api/v1/quidditchplayers/player")
-                .param("houseName", HouseName.RAVENCLAW.name)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
-
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().is5xxServerError)
-            .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
-    }
-
-    @Test
-    fun `getPlayers no house param then success call`(): Unit = runBlocking {
-
-        // given
-        val response = ResponseEntityWrapper(
-            data = MockData.ravenclawTeam(),
-            error = null,
-            statusCode = HttpStatus.OK.value()
-        )
-
-        val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
-
-        // When
-        Mockito.`when`(mockPlayerService.getPlayers(null)).thenReturn(MockData.ravenclawTeam())
-
-        // verify
-        val mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders
-                .get("/api/v1/quidditchplayers/player")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
-
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
-    }
+            mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError)
+                .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
+        }
 
     @Test
-    fun `getPlayers no house param then throw clientException`(): Unit = runBlocking {
+    fun `getPlayers from Ravenclaw house then throw internalException`(): Unit =
+        runBlocking {
+            // given
+            val response =
+                ResponseEntityWrapper<List<Player>>(
+                    data = null,
+                    error =
+                        Error(
+                            isError = true,
+                            message = "Could not find players",
+                        ),
+                    statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                )
 
-        // given
-        val response = ResponseEntityWrapper<List<Player>>(
-            data = null,
-            error = Error(
-                isError = true,
-                message = "Could not find players"
-            ),
-            statusCode = HttpStatus.BAD_REQUEST.value()
-        )
+            val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
 
-        val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
+            // when
+            Mockito.`when`(mockPlayerService.getPlayers(HouseName.RAVENCLAW.name)).thenThrow(InternalException("Could not find players"))
 
+            // Verify
+            val mvcResult =
+                mockMvc.perform(
+                    MockMvcRequestBuilders
+                        .get("/api/v1/quidditchplayers/player")
+                        .param("houseName", HouseName.RAVENCLAW.name)
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                    .andReturn()
 
-        // when
-        Mockito.`when`(mockPlayerService.getPlayers(null)).thenThrow(ClientException("Could not find players"))
+            mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError)
+                .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
+        }
 
-        // Verify
-        val mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders
-                .get("/api/v1/quidditchplayers/player")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
+    @Test
+    fun `getPlayers no house param then success call`(): Unit =
+        runBlocking {
+            // given
+            val response =
+                ResponseEntityWrapper(
+                    data = MockData.ravenclawTeam(),
+                    error = null,
+                    statusCode = HttpStatus.OK.value(),
+                )
 
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().is4xxClientError)
-            .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
-    }
+            val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
+
+            // When
+            Mockito.`when`(mockPlayerService.getPlayers(null)).thenReturn(MockData.ravenclawTeam())
+
+            // verify
+            val mvcResult =
+                mockMvc.perform(
+                    MockMvcRequestBuilders
+                        .get("/api/v1/quidditchplayers/player")
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                    .andReturn()
+
+            mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
+        }
+
+    @Test
+    fun `getPlayers no house param then throw clientException`(): Unit =
+        runBlocking {
+            // given
+            val response =
+                ResponseEntityWrapper<List<Player>>(
+                    data = null,
+                    error =
+                        Error(
+                            isError = true,
+                            message = "Could not find players",
+                        ),
+                    statusCode = HttpStatus.BAD_REQUEST.value(),
+                )
+
+            val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
+
+            // when
+            Mockito.`when`(mockPlayerService.getPlayers(null)).thenThrow(ClientException("Could not find players"))
+
+            // Verify
+            val mvcResult =
+                mockMvc.perform(
+                    MockMvcRequestBuilders
+                        .get("/api/v1/quidditchplayers/player")
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                    .andReturn()
+
+            mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError)
+                .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
+        }
+
 //
     @Test
-    fun `getPlayers no house param then throw internalException`(): Unit = runBlocking {
+    fun `getPlayers no house param then throw internalException`(): Unit =
+        runBlocking {
+            // given
+            val response =
+                ResponseEntityWrapper<List<Player>>(
+                    data = null,
+                    error =
+                        Error(
+                            isError = true,
+                            message = "Could not find players",
+                        ),
+                    statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                )
 
-        // given
-        val response = ResponseEntityWrapper<List<Player>>(
-            data = null,
-            error = Error(
-                isError = true,
-                message = "Could not find players"
-            ),
-            statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value()
-        )
+            val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
 
-        val responseJsonPlayerResponseEntityWrapper = jsonPlayerResponseEntityWrapper.write(response).json
+            // when
+            Mockito.`when`(mockPlayerService.getPlayers(null)).thenThrow(InternalException("Could not find players"))
 
+            // Verify
+            val mvcResult =
+                mockMvc.perform(
+                    MockMvcRequestBuilders
+                        .get("/api/v1/quidditchplayers/player")
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                    .andReturn()
 
-        // when
-        Mockito.`when`(mockPlayerService.getPlayers(null)).thenThrow(InternalException("Could not find players"))
-
-        // Verify
-        val mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders
-                .get("/api/v1/quidditchplayers/player")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
-
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().is5xxServerError)
-            .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
-    }
+            mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError)
+                .andExpect(MockMvcResultMatchers.content().json(responseJsonPlayerResponseEntityWrapper))
+        }
 }

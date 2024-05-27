@@ -2,8 +2,37 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@3.3.0
 jobs: # a collection of steps
-  build: # runs not using Workflows must have a `build` job as entry point
+  ktlint-check:
+    machine: true
 
+    working_directory: ~/quidditchplayers # directory where steps will run
+
+    steps: # a collection of executable commands
+      - run:
+          name: Install OpenJDK 17
+          command: |
+            sudo apt-get update && sudo apt-get install openjdk-17-jdk
+            sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
+            java -version
+      - checkout # check out source code to working directory
+      - restore_cache: # restore the saved cache after the first run or if `build.gradle` has changed
+          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          keys:
+            - quidditchplayers-{{ checksum "build.gradle.kts" }}
+
+      - run: ./gradlew dependencies # gets the project dependencies
+
+      - save_cache: # saves the project dependencies
+          paths:
+            - ~/.gradle
+          key: quidditchplayers-{{ checksum "build.gradle.kts" }}
+      - run:
+          name: Run ktLint Checks
+          command: |
+            ./gradlew ktlintCheck
+            ./gradlew ktlintFormat
+  unit-test:
     machine: true
 
     working_directory: ~/quidditchplayers # directory where steps will run
@@ -49,3 +78,8 @@ jobs: # a collection of steps
           root: ~/quidditchplayers
           paths:
             - build/libs/quidditchplayers-0.0.1-SNAPSHOT.jar
+workflows:
+  test-and-build:
+    jobs:
+      - ktlint-check
+      - unit-test

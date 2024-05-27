@@ -9,34 +9,34 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Repository
-import java.util.*
+import java.util.UUID
 
 @Repository("statusRepository")
 class StatusRepository : StatusDao {
-
     @Throws(ClientException::class, InternalException::class)
     override suspend fun getStatusByHouseName(houseName: String?): Status {
         return coroutineScope {
             withContext(Dispatchers.Default) {
                 try {
-
-                    val players = if (!houseName.isNullOrEmpty()) {
-                        MockData.allQuidditchTeam.filter {
-                            it.house.name == houseName
+                    val players =
+                        if (!houseName.isNullOrEmpty()) {
+                            MockData.allQuidditchTeam.filter {
+                                it.house.name == houseName
+                            }
+                        } else {
+                            MockData.allQuidditchTeam
                         }
-                    } else {
-                        MockData.allQuidditchTeam
-                    }
 
                     val player = players.random()
-                    val status = MockData.getStatuses(
-                        name = "${player.firstName} ${player.lastName}",
-                        favoriteSubject = player.favoriteSubject
-                    ).random()
+                    val status =
+                        MockData.getStatuses(
+                            name = "${player.firstName} ${player.lastName}",
+                            favoriteSubject = player.favoriteSubject,
+                        ).random()
 
                     Status(
                         playerId = player.id,
-                        status = status
+                        status = status,
                     )
                 } catch (e: ClientException) {
                     Logger.errorStackTrace("getStatusByHouseName()", e)
@@ -57,20 +57,22 @@ class StatusRepository : StatusDao {
         return coroutineScope {
             withContext(Dispatchers.Default) {
                 try {
-                    val player = MockData
-                        .allQuidditchTeam
-                        .first { player ->
-                            player.id == playerId
-                        }
+                    val player =
+                        MockData
+                            .allQuidditchTeam
+                            .first { player ->
+                                player.id == playerId
+                            }
 
-                    val status = MockData.getStatuses(
-                        name = "${player.firstName} ${player.lastName}",
-                        favoriteSubject = player.favoriteSubject
-                    ).random()
+                    val status =
+                        MockData.getStatuses(
+                            name = "${player.firstName} ${player.lastName}",
+                            favoriteSubject = player.favoriteSubject,
+                        ).random()
 
                     Status(
                         playerId = player.id,
-                        status = status
+                        status = status,
                     )
                 } catch (e: ClientException) {
                     Logger.errorStackTrace("getStatusByPlayerId()", e)

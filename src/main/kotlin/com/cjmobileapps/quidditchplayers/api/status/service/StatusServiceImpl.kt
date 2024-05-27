@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class StatusServiceImpl(@Qualifier("statusRepository") val statusDao: StatusDao) : StatusService {
-
+class StatusServiceImpl(
+    @Qualifier("statusRepository") val statusDao: StatusDao,
+) : StatusService {
     @Throws(ClientException::class, InternalException::class)
     override suspend fun getStatusByHouseName(houseName: String?) = statusDao.getStatusByHouseName(houseName)
 

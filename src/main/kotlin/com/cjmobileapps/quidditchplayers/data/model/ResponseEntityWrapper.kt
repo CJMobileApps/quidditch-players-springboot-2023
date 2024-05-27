@@ -10,19 +10,20 @@ import org.springframework.http.ResponseEntity
 data class ResponseEntityWrapper<T>(
     val data: T? = null,
     val error: Error? = null,
-    val statusCode: Int
+    val statusCode: Int,
 )
 
 data class Error(
     val isError: Boolean = false,
-    val message: String? = null
+    val message: String? = null,
 )
 
 fun <T> ClientException.toResponseEntity(): ResponseEntity<ResponseEntityWrapper<T>> {
-    val response = ResponseEntityWrapper<T>(
-        error = Error(isError = true, message = this.message),
-        statusCode = HttpStatus.BAD_REQUEST.value()
-    )
+    val response =
+        ResponseEntityWrapper<T>(
+            error = Error(isError = true, message = this.message),
+            statusCode = HttpStatus.BAD_REQUEST.value(),
+        )
 
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
@@ -30,10 +31,11 @@ fun <T> ClientException.toResponseEntity(): ResponseEntity<ResponseEntityWrapper
 }
 
 fun <T> InternalException.toResponseEntity(): ResponseEntity<ResponseEntityWrapper<T>> {
-    val response = ResponseEntityWrapper<T>(
-        error = Error(isError = true, message = this.message),
-        statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value()
-    )
+    val response =
+        ResponseEntityWrapper<T>(
+            error = Error(isError = true, message = this.message),
+            statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        )
 
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)

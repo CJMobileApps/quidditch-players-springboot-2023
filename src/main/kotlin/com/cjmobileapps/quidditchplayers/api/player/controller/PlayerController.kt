@@ -18,18 +18,18 @@ import java.util.concurrent.TimeUnit
 @RequestMapping("api/v1/quidditchplayers/player")
 @RestController
 class PlayerController(
-    val playerService: PlayerService
+    val playerService: PlayerService,
 ) {
-
     @GetMapping
     suspend fun getPlayers(
-        @RequestParam houseName: String?
+        @RequestParam houseName: String?,
     ): ResponseEntity<ResponseEntityWrapper<List<Player>>> {
         return try {
-            val response = ResponseEntityWrapper(
-                data = playerService.getPlayers(houseName),
-                statusCode = HttpStatus.OK.value()
-            )
+            val response =
+                ResponseEntityWrapper(
+                    data = playerService.getPlayers(houseName),
+                    statusCode = HttpStatus.OK.value(),
+                )
 
             ResponseEntity
                 .status(HttpStatus.OK)

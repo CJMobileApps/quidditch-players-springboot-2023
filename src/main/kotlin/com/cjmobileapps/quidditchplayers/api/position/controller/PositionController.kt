@@ -17,16 +17,16 @@ import java.util.concurrent.TimeUnit
 @RequestMapping("api/v1/quidditchplayers/position")
 @RestController
 class PositionController(
-    val positionService: PositionService
+    val positionService: PositionService,
 ) {
-
     @GetMapping
     suspend fun getPositions(): ResponseEntity<ResponseEntityWrapper<Map<Int, Position>>> {
         return try {
-            val response = ResponseEntityWrapper(
-                data = positionService.getPositions(),
-                statusCode = HttpStatus.OK.value()
-            )
+            val response =
+                ResponseEntityWrapper(
+                    data = positionService.getPositions(),
+                    statusCode = HttpStatus.OK.value(),
+                )
 
             ResponseEntity
                 .status(HttpStatus.OK)

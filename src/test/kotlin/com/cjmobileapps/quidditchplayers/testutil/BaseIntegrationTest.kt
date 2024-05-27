@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 abstract class BaseIntegrationTest {
-
     val restTemplate by lazy { RestTemplate() }
 
     @LocalServerPort
@@ -23,7 +22,7 @@ abstract class BaseIntegrationTest {
     @Autowired
     lateinit var mapper: ObjectMapper
 
-    val localHostUri by lazy { "http://localhost:${localSeverPort}" }
+    val localHostUri by lazy { "http://localhost:$localSeverPort" }
 
     @BeforeEach
     fun setupBefore() {

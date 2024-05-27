@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 @Service
-class HouseServiceImpl(@Qualifier("houseRepository") val houseDao: HouseDao): HouseService {
-
+class HouseServiceImpl(
+    @Qualifier("houseRepository") val houseDao: HouseDao,
+) : HouseService {
     @Throws(ClientException::class, InternalException::class)
     override suspend fun getAllHouses(): List<House> {
         return houseDao.getAllHouses()

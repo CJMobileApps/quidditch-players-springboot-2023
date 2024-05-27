@@ -17,16 +17,16 @@ import java.util.concurrent.TimeUnit
 @RequestMapping("api/v1/quidditchplayers/house")
 @RestController
 class HouseController(
-    val houseService: HouseService
+    val houseService: HouseService,
 ) {
-
     @GetMapping
     suspend fun getAllHouses(): ResponseEntity<ResponseEntityWrapper<List<House>>> {
         return try {
-            val response = ResponseEntityWrapper(
-                data = houseService.getAllHouses(),
-                statusCode = HttpStatus.OK.value()
-            )
+            val response =
+                ResponseEntityWrapper(
+                    data = houseService.getAllHouses(),
+                    statusCode = HttpStatus.OK.value(),
+                )
 
             ResponseEntity
                 .status(HttpStatus.OK)
