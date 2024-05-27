@@ -2,76 +2,74 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@3.3.0
 jobs: # a collection of steps
-#  ktlint-check:
-#    build: # runs not using Workflows must have a `build` job as entry point
-#
-#      machine: true
-#
-#      working_directory: ~/quidditchplayers # directory where steps will run
-#
-#      steps: # a collection of executable commands
-#        - run:
-#            name: Install OpenJDK 17
-#            command: |
-#              sudo apt-get update && sudo apt-get install openjdk-17-jdk
-#              sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
-#              sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
-#              java -version
-#        - run:
-#            name: Run ktLint Checks
-#            command: |
-#              ./gradlew ktlintCheck
-#              ./gradlew ktlintFormat
+  #  ktlint-check:
+  #    build: # runs not using Workflows must have a `build` job as entry point
+  #
+  #      machine: true
+  #
+  #      working_directory: ~/quidditchplayers # directory where steps will run
+  #
+  #      steps: # a collection of executable commands
+  #        - run:
+  #            name: Install OpenJDK 17
+  #            command: |
+  #              sudo apt-get update && sudo apt-get install openjdk-17-jdk
+  #              sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+  #              sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
+  #              java -version
+  #        - run:
+  #            name: Run ktLint Checks
+  #            command: |
+  #              ./gradlew ktlintCheck
+  #              ./gradlew ktlintFormat
   unit-test:
-    build: # runs not using Workflows must have a `build` job as entry point
+    machine: true
 
-      machine: true
+    working_directory: ~/quidditchplayers # directory where steps will run
 
-      working_directory: ~/quidditchplayers # directory where steps will run
+    steps: # a collection of executable commands
 
-      steps: # a collection of executable commands
+      - run:
+          name: Install OpenJDK 17
+          command: |
+            sudo apt-get update && sudo apt-get install openjdk-17-jdk
+            sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
+            java -version
 
-        - run:
-            name: Install OpenJDK 17
-            command: |
-              sudo apt-get update && sudo apt-get install openjdk-17-jdk
-              sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
-              sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
-              java -version
+      - checkout # check out source code to working directory
 
-        - checkout # check out source code to working directory
+      - restore_cache: # restore the saved cache after the first run or if `build.gradle` has changed
+          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          keys:
+            - quidditchplayers-{{ checksum "build.gradle.kts" }}
 
-        - restore_cache: # restore the saved cache after the first run or if `build.gradle` has changed
-            # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-            keys:
-              - quidditchplayers-{{ checksum "build.gradle.kts" }}
+      - run: ./gradlew dependencies # gets the project dependencies
 
-        - run: ./gradlew dependencies # gets the project dependencies
+      - save_cache: # saves the project dependencies
+          paths:
+            - ~/.gradle
+          key: quidditchplayers-{{ checksum "build.gradle.kts" }}
 
-        - save_cache: # saves the project dependencies
-            paths:
-              - ~/.gradle
-            key: quidditchplayers-{{ checksum "build.gradle.kts" }}
+      - run: ./gradlew build # will make a jar build and run the actual tests
 
-        - run: ./gradlew build # will make a jar build and run the actual tests
+      - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard.
+          # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: build/test-results/test
 
-        - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard.
-            # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-            path: build/test-results/test
+      - store_artifacts: # store the uberjar as an artifact
+          # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: build/libs/quidditchplayers-0.0.1-SNAPSHOT.jar
 
-        - store_artifacts: # store the uberjar as an artifact
-            # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-            path: build/libs/quidditchplayers-0.0.1-SNAPSHOT.jar
+      - codecov/upload:
+          file: jacocoTestReport.xml
 
-        - codecov/upload:
-            file: jacocoTestReport.xml
-
-        - persist_to_workspace:
-            root: ~/quidditchplayers
-            paths:
-              - build/libs/quidditchplayers-0.0.1-SNAPSHOT.jar
+      - persist_to_workspace:
+          root: ~/quidditchplayers
+          paths:
+            - build/libs/quidditchplayers-0.0.1-SNAPSHOT.jar
 workflows:
   test-and-build:
     jobs:
-      - ktlint-check
+#      - ktlint-check
       - unit-test
