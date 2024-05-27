@@ -1,6 +1,6 @@
-# Quidditch Players Android 2023 [![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=shield)](https://circleci.com/gh/circleci/circleci-docs) [![codecov](https://codecov.io/gh/CJMobileApps/quidditch-players-android-2023/graph/badge.svg?token=nruZM3ZAGj)](https://codecov.io/gh/CJMobileApps/quidditch-players-android-2023)
+# Quidditch Players Spring Boot 2023 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/CJMobileApps/quidditch-players-springboot-2023/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/CJMobileApps/quidditch-players-springboot-2023/tree/main) [![codecov](https://codecov.io/gh/CJMobileApps/quidditch-players-springboot-2023/graph/badge.svg?token=C8Q7QAXBVI)](https://codecov.io/gh/CJMobileApps/quidditch-players-springboot-2023)
 
-Quidditch Players for Hogwarts Houses Springboot 2023
+Quidditch Players for Hogwarts Houses Spring Boot 2023
 
 <!----
 Build Tools & Versions Used
