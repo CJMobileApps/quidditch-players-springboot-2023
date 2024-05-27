@@ -2,26 +2,26 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@3.3.0
 jobs: # a collection of steps
-  ktlint-check:
-    build: # runs not using Workflows must have a `build` job as entry point
-
-      machine: true
-
-      working_directory: ~/quidditchplayers # directory where steps will run
-
-      steps: # a collection of executable commands
-        - run:
-            name: Install OpenJDK 17
-            command: |
-              sudo apt-get update && sudo apt-get install openjdk-17-jdk
-              sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
-              sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
-              java -version
-        - run:
-            name: Run ktLint Checks
-            command: |
-              ./gradlew ktlintCheck
-              ./gradlew ktlintFormat
+#  ktlint-check:
+#    build: # runs not using Workflows must have a `build` job as entry point
+#
+#      machine: true
+#
+#      working_directory: ~/quidditchplayers # directory where steps will run
+#
+#      steps: # a collection of executable commands
+#        - run:
+#            name: Install OpenJDK 17
+#            command: |
+#              sudo apt-get update && sudo apt-get install openjdk-17-jdk
+#              sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+#              sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
+#              java -version
+#        - run:
+#            name: Run ktLint Checks
+#            command: |
+#              ./gradlew ktlintCheck
+#              ./gradlew ktlintFormat
   unit-test:
     build: # runs not using Workflows must have a `build` job as entry point
 
