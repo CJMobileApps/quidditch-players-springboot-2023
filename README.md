@@ -10,7 +10,7 @@ Java Version: 17<br />
 Branches
 ----
 - [main](https://github.com/CJMobileApps/quidditch-players-springboot-2023/tree/main) - branch uses REST APIs
-- [graphql](https://github.com/CJMobileApps/quidditch-players-springboot-2023/tree/graphql) - branch uses GraphQL
+- [graphql](https://github.com/CJMobileApps/quidditch-players-springboot-2023/tree/graphql) - one day I might make a grpahql branch
 
 Dependencies
 ---
