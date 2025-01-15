@@ -28,7 +28,7 @@ object MockData {
                 favoriteSubject = "Defense Against The Dark Arts",
                 // Seeker
                 position = 4,
-                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/9/97/Harry_Potter.jpg/revision/latest?cb=20140603201724",
+                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest",
                 house = HouseName.GRYFFINDOR,
             ),
             Player(
@@ -47,7 +47,7 @@ object MockData {
                     ),
                 favoriteSubject = "Transfiguration",
                 position = 1,
-                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/3/32/Katie_Bell_infobox.jpg/revision/latest?cb=20170118053940",
+                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/3/32/Katie_Bell_infobox.jpg/revision/latest",
                 house = HouseName.GRYFFINDOR,
             ),
             Player(
@@ -66,7 +66,7 @@ object MockData {
                     ),
                 favoriteSubject = "Care of Magical Creatures",
                 position = 1,
-                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/2/24/GOF_promo_Angelina_Johnson.jpg/revision/latest?cb=20100522214321",
+                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/2/24/GOF_promo_Angelina_Johnson.jpg/revision/latest",
                 house = HouseName.GRYFFINDOR,
             ),
             Player(
@@ -85,7 +85,7 @@ object MockData {
                     ),
                 favoriteSubject = "Charms",
                 position = 2,
-                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/9/90/Fred_HS_TDH_promo.jpg/revision/latest/scale-to-width-down/1000?cb=20230526122025",
+                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/9/9e/Fred_Weasley_promo_DHF1.jpg/revision/latest",
                 house = HouseName.GRYFFINDOR,
             ),
             Player(
@@ -104,7 +104,7 @@ object MockData {
                     ),
                 favoriteSubject = "Charms",
                 position = 2,
-                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/2/2a/DH_promo_front_closeup_George_Weasley.jpg/revision/latest?cb=20161119235305",
+                imageUrl = "https://static.wikia.nocookie.net/harrypotter/images/b/b5/George_Weasley_promo_DHF1.jpg/revision/latest",
                 house = HouseName.GRYFFINDOR,
             ),
             Player(
